@@ -6,8 +6,9 @@ Comenzamos con el escaneo con **Nmap** para identificar los puertos abiertos en 
 ```sh
 nmap -p- --open --min-rate 5000 -sS -vvv -n -Pn <IP>
 ```
+![image](https://github.com/ErickAnchundia/Machines-Write-Ups/blob/main/images/Pasted%20image%2020250420150515.png)
+<br>
 
-![Escaneo con Nmap](Pasted%20image%20250420150515.png)
 
 Se identifican **2 puertos abiertos**:
 - **HTTPS** (`443`)
@@ -20,12 +21,12 @@ Utilizamos **Gobuster** para realizar un fuzzing en el puerto `80` y descubrir r
 gobuster dir -w /home/kali/WordLists/directory-medium -u http://<IP> -x txt,sql,py,js,php,html
 ```
 
-![Resultado de Gobuster](Pasted%20image%20250420150909.png)
-
+![image](https://github.com/ErickAnchundia/Machines-Write-Ups/blob/main/images/Pasted%20image%2020250420150909.png)
+<br>
 Entre los resultados, encontramos un mensaje dirigido a un usuario llamado **Mario**.
 
-![Mensaje encontrado](Pasted%20image%20250420151003.png)
-
+![image](https://github.com/ErickAnchundia/Machines-Write-Ups/blob/main/images/Pasted%20image%2020250420151003.png)
+<br>
 ## Ataque de fuerza bruta por SSH
 Probamos un ataque de **fuerza bruta con diccionario** contra el usuario descubierto.
 
@@ -33,8 +34,8 @@ Probamos un ataque de **fuerza bruta con diccionario** contra el usuario descubi
 hydra -l mario -P /usr/share/wordlists/rockyou.txt ssh://<IP>
 ```
 
-![Ataque de fuerza bruta](Pasted%20image%20250420151934.png)
-
+![image](https://github.com/ErickAnchundia/Machines-Write-Ups/blob/main/images/Pasted%20image%2020250420151934.png)
+<br>
 Ejecutando el ataque, encontramos que la contraseña es **chocolate**.
 
 ## Acceso por SSH y escalada de privilegios
@@ -52,8 +53,8 @@ sudo -l
 
 Descubrimos que tenemos acceso a ejecutar **vim** con privilegios elevados.
 
-![Permisos con Vim](Pasted%20image%20250420152338.png)
-
+![image](https://github.com/ErickAnchundia/Machines-Write-Ups/blob/main/images/Pasted%20image%2020250420152338.png)
+<br>
 Aprovechamos **Vim** para abrir una terminal:
 
 ```sh
@@ -62,9 +63,9 @@ Aprovechamos **Vim** para abrir una terminal:
 
 Desde aquí solicitamos a **vim** que abra otra sesión con privilegios de **root**.
 
-![Ejecutando Vim como root](Pasted%20image%20250420152811.png)
-
+![image](https://github.com/ErickAnchundia/Machines-Write-Ups/blob/main/images/Pasted%20image%2020250420152811.png)
+<br>
 Y con esto, **ya somos root**.
 
-![Acceso root obtenido](Pasted%20image%20250420152835.png)
-
+![image](https://github.com/ErickAnchundia/Machines-Write-Ups/blob/main/images/Pasted%20image%2020250420152835.png)
+<br>
